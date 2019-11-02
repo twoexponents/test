@@ -1,0 +1,56 @@
+#1
+answer) 
+select site_id, count(distinct(user_id)) 
+from data 
+where country_id = "BDV" 
+group by site_id 
+order by count(distinct(user_id)) desc 
+limit 1;
+
+
+#2
+answer)
+select user_id, site_id, count(*) as number_of_visits 
+from data where ts > 20190203 and ts < 20190205 
+group by user_id, site_id 
+having count(*) > 10;
+
+
+#3
+answer) 
+select site_id, count(*) 
+from (select user_id, max(ts) as Mts from data group by user_id) as user_Mts, data 
+where user_Mts.Mts = data.ts 
+group by site_id 
+order by count(*) desc 
+limit 3;
+
+#4
+answer) 
+select count(*) 
+from (select user_id from data group by user_id having count(*) = 1) as a;
+
+explain) 
+I understand the question is asking that counts unique users who visit the site only once during the timestamp data.
+
+
+#5
+answer) 
+select site_id, A_counts/B_counts 
+from (select site_id, count(distinct(user_id)) as A_counts from data where user_id in 
+	(select user_id from data group by user_id having count(distinct(country_id)) > 1) group by site_id) as A 
+      natural left join 
+     (select site_id, count(distinct(user_id)) as B_counts from data group by site_id) as B 
+order by A_counts/B_counts desc
+limit 3;
+
+explain) 
+I hope the term 'B/A' in question actually means "A devided by B". Otherwise, some sites which have zero (A) will get infinite value.
+Additionally, I make a python code which solves the question step by step.
+
+
+
+
+
+
+
