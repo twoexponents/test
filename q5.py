@@ -2,7 +2,7 @@ import pymysql
 import operator
 
 def sql_connect():
-  conn = pymysql.connect(host="localhost", user="root", passwd="mmlab2019", db="moloco")
+  conn = pymysql.connect(host="localhost", user="root", passwd="passwd", db="moloco")
   cursor = conn.cursor()
   return conn, cursor
 
